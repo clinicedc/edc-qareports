@@ -76,15 +76,15 @@ QA Report as an SQL VIEW
 Now that you have created the basic structure for the Reports App, create an SQL VIEW. Some rules apply:
 
 * To show the model class in Admin, the SQL VIEW needs at least an ID column.
-* To use the EDC ModelAdmin classes, include ``id``, ``subject_identifier``, ``site_id``, ``created`` and ``report_name``.
-* Columns ``id``, ``created`` and ``report_name`` are generated columns from the SQL VIEW, not values coming from the underlying SQL statement / data tables.
+* To use the EDC ModelAdmin classes, include ``id``, ``subject_identifier``, ``site_id``, ``created`` and ``report_model``.
+* Columns ``id``, ``created`` and ``report_model`` are generated columns from the SQL VIEW, not values coming from the underlying SQL statement / data tables.
 * Suffix the view name with ``_view``.
 
 .. code-block:: sql
 
     create view my_view_in_sql_view as (
         select *, uuid() as 'id', now() as 'created',
-            'my_view_in_sql' as report_name
+            'meta_reports.myviewinsql' as report_model
             from (
                 select  distinct `subject_identifier`, `site_id`, col1, col2, col3
                 from some_crf_table
