@@ -78,6 +78,7 @@ Now that you have created the basic structure for the Reports App, create an SQL
 * To show the model class in Admin, the SQL VIEW needs at least an ID column.
 * To use the EDC ModelAdmin classes, include ``id``, ``subject_identifier``, ``site_id``, ``created`` and ``report_model``.
 * Columns ``id``, ``created`` and ``report_model`` are generated columns from the SQL VIEW, not values coming from the underlying SQL statement / data tables.
+* Column ``report_model`` is in label_lower format.
 * Suffix the view name with ``_view``.
 
 .. code-block:: sql
