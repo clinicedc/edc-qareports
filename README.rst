@@ -210,9 +210,13 @@ In this example the app is called ``meta_reports`` and the group is ``META_REPOR
 .. code-block:: python
 
     # meta_reports/auth_objects.py
+
     reports_codenames = [c for c in get_app_codenames("meta_reports")]
 
+.. code-block:: python
+
     # meta_reports/auths.py
+
     site_auths.add_group(*reports_codenames, name=META_REPORTS)
     # add the group to the QA_REPORTS role
     site_auths.update_role(META_REPORTS, name=QA_REPORTS_ROLE)
