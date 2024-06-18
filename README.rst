@@ -100,7 +100,7 @@ The unmanaged model class would be something like this:
 
 .. code-block:: python
 
-    class MyViewInSqle(ReportModelMixin, models.Model):
+    class MyViewInSql(ReportModelMixin, models.Model):
 
         col1 = models.CharField(max_length=25)
 
