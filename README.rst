@@ -167,7 +167,7 @@ To use ``QaReportNote`` with your QA report, declare the QA Report admin class w
     from edc_visit_schedule.admin import ScheduleStatusListFilter
 
     from ...admin_site import meta_reports_admin
-    from ...models import UnattendedThreeInRow2
+    from ...models import MyViewInSql
 
 
     @admin.register(MyViewInSql, site=meta_reports_admin)
