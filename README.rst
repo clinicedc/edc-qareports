@@ -100,7 +100,7 @@ The unmanaged model class would be something like this:
 
 .. code-block:: python
 
-    class MyViewInSql(ReportModelMixin, models.Model):
+    class MyViewInSqle(ReportModelMixin, models.Model):
 
         col1 = models.CharField(max_length=25)
 
@@ -170,8 +170,8 @@ To use ``QaReportNote`` with your QA report, declare the QA Report admin class w
     from ...models import UnattendedThreeInRow2
 
 
-    @admin.register(UnattendedThreeInRow2, site=meta_reports_admin)
-    class UnattendedThreeInRow2Admin(
+    @admin.register(MyViewInSql, site=meta_reports_admin)
+    class MyViewInSqlAdmin(
         ReportWithNoteModelAdminMixin,
         SiteModelAdminMixin,
         ModelAdminDashboardMixin,
