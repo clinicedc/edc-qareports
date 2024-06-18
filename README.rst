@@ -128,7 +128,7 @@ Create an empty migration in the reports app and read the SQL file in the migrat
 
     operations = [
         migrations.RunSQL(
-            read_unmanaged_model_sql("patient_history_missing_baseline_cd4.isql", app_name="meta_reports")
+            read_unmanaged_model_sql("my_view_in_sql.sql", app_name="meta_reports")
         ),
     ]
 
