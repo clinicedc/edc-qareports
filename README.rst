@@ -76,15 +76,16 @@ QA Report as an SQL VIEW
 Now that you have created the basic structure for the Reports App, create an SQL VIEW. Some rules apply:
 
 * To show the model class in Admin, the SQL VIEW needs at least an ID column.
-* To use the EDC ModelAdmin classes, include ``id``, ``subject_identifier``, ``site_id``, ``created`` and ``report_name``.
-* Columns ``id``, ``created`` and ``report_name`` are generated columns from the SQL VIEW, not values coming from the underlying SQL statement / data tables.
+* To use the EDC ModelAdmin classes, include ``id``, ``subject_identifier``, ``site_id``, ``created`` and ``report_model``.
+* Columns ``id``, ``created`` and ``report_model`` are generated columns from the SQL VIEW, not values coming from the underlying SQL statement / data tables.
+* Column ``report_model`` is in label_lower format.
 * Suffix the view name with ``_view``.
 
 .. code-block:: sql
 
     create view my_view_in_sql_view as (
         select *, uuid() as 'id', now() as 'created',
-            'my_view_in_sql' as report_name
+            'meta_reports.myviewinsql' as report_model
             from (
                 select  distinct `subject_identifier`, `site_id`, col1, col2, col3
                 from some_crf_table
@@ -128,7 +129,7 @@ Create an empty migration in the reports app and read the SQL file in the migrat
 
     operations = [
         migrations.RunSQL(
-            read_unmanaged_model_sql("patient_history_missing_baseline_cd4.sql", app_name="meta_reports")
+            read_unmanaged_model_sql("my_view_in_sql.sql", app_name="meta_reports")
         ),
     ]
 
@@ -141,14 +142,14 @@ that drops and re-creates the SQL VIEW.
     ...
 
     operations = [
-        migrations.RunSQL("drop view patient_history_missing_baseline_cd4"),
+        migrations.RunSQL("drop view my_view_in_sql_view"),
         migrations.RunSQL(
-            read_unmanaged_model_sql("patient_history_missing_baseline_cd4.sql", app_name="meta_reports")
+            read_unmanaged_model_sql("my_view_in_sql.sql", app_name="meta_reports")
         ),
     ]
 
 
-Linking ``ReportNote`` with your QA Report
+Linking ``QaReportNote`` with your QA Report
 ++++++++++++++++++++++++++++++++++++++++++
 
 You can link your QA Report in Admin to model ``QaReportNote``. The ``QaReportNote``
@@ -167,11 +168,11 @@ To use ``QaReportNote`` with your QA report, declare the QA Report admin class w
     from edc_visit_schedule.admin import ScheduleStatusListFilter
 
     from ...admin_site import meta_reports_admin
-    from ...models import UnattendedThreeInRow2
+    from ...models import MyViewInSql
 
 
-    @admin.register(UnattendedThreeInRow2, site=meta_reports_admin)
-    class UnattendedThreeInRow2Admin(
+    @admin.register(MyViewInSql, site=meta_reports_admin)
+    class MyViewInSqlAdmin(
         ReportWithNoteModelAdminMixin,
         SiteModelAdminMixin,
         ModelAdminDashboardMixin,
@@ -209,9 +210,13 @@ In this example the app is called ``meta_reports`` and the group is ``META_REPOR
 .. code-block:: python
 
     # meta_reports/auth_objects.py
+
     reports_codenames = [c for c in get_app_codenames("meta_reports")]
 
+.. code-block:: python
+
     # meta_reports/auths.py
+
     site_auths.add_group(*reports_codenames, name=META_REPORTS)
     # add the group to the QA_REPORTS role
     site_auths.update_role(META_REPORTS, name=QA_REPORTS_ROLE)
