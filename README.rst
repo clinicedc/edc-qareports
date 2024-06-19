@@ -150,7 +150,7 @@ that drops and re-creates the SQL VIEW.
 
 
 Linking ``QaReportNote`` with your QA Report
-++++++++++++++++++++++++++++++++++++++++++
+++++++++++++++++++++++++++++++++++++++++++++
 
 You can link your QA Report in Admin to model ``QaReportNote``. The ``QaReportNote``
 model class is used to track the ``status`` of the report item and provide a space for any
