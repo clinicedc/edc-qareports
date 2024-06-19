@@ -46,8 +46,8 @@ project_settings = DefaultTestSettings(
         "edc_qareports.apps.AppConfig",
         "edc_appconfig.apps.AppConfig",
     ],
-    add_dashboard_middleware=True,
-    add_lab_dashboard_middleware=True,
+    add_dashboard_middleware=False,
+    add_lab_dashboard_middleware=False,
 ).settings
 
 

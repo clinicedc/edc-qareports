@@ -101,7 +101,7 @@ The unmanaged model class would be something like this:
 
 .. code-block:: python
 
-    class MyViewInSql(ReportModelMixin, models.Model):
+    class MyViewInSql(QaReportModelMixin, models.Model):
 
         col1 = models.CharField(max_length=25)
 
