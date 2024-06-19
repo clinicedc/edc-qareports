@@ -33,6 +33,7 @@ project_settings = DefaultTestSettings(
         "edc_action_item.apps.AppConfig",
         "edc_appointment.apps.AppConfig",
         "edc_auth.apps.AppConfig",
+        "edc_dashboard.apps.AppConfig",
         "edc_data_manager.apps.AppConfig",
         "edc_form_runners.apps.AppConfig",
         "edc_lab.apps.AppConfig",
@@ -45,8 +46,8 @@ project_settings = DefaultTestSettings(
         "edc_qareports.apps.AppConfig",
         "edc_appconfig.apps.AppConfig",
     ],
-    add_dashboard_middleware=True,
-    add_lab_dashboard_middleware=True,
+    add_dashboard_middleware=False,
+    add_lab_dashboard_middleware=False,
 ).settings
 
 
