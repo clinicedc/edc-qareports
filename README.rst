@@ -163,7 +163,7 @@ To use ``QaReportNote`` with your QA report, declare the QA Report admin class w
     from django.contrib import admin
     from edc_model_admin.dashboard import ModelAdminDashboardMixin
     from edc_model_admin.mixins import TemplatesModelAdminMixin
-    from edc_qareports.admin import ReportWithNoteModelAdminMixin
+    from edc_qareports.admin import QaReportWithNoteModelAdminMixin
     from edc_sites.admin import SiteModelAdminMixin
     from edc_visit_schedule.admin import ScheduleStatusListFilter
 
@@ -173,7 +173,7 @@ To use ``QaReportNote`` with your QA report, declare the QA Report admin class w
 
     @admin.register(MyViewInSql, site=meta_reports_admin)
     class MyViewInSqlAdmin(
-        ReportWithNoteModelAdminMixin,
+        QaReportWithNoteModelAdminMixin,
         SiteModelAdminMixin,
         ModelAdminDashboardMixin,
         TemplatesModelAdminMixin,
