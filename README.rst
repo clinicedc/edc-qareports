@@ -156,7 +156,7 @@ You can link your QA Report in Admin to model ``QaReportNote``. The ``QaReportNo
 model class is used to track the ``status`` of the report item and provide a space for any
 notes.
 
-To use ``QaReportNote`` with your QA report, declare the QA Report admin class with ``ReportWithNoteModelAdminMixin``.
+To use ``QaReportNote`` with your QA report, declare the QA Report admin class with ``QaReportWithNoteModelAdminMixin``.
 
 .. code-block:: python
 
