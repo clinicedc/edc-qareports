@@ -30,6 +30,7 @@ project_settings = DefaultTestSettings(
         "django.contrib.sites",
         "django_crypto_fields.apps.AppConfig",
         "multisite",
+        "django_db_views",
         "edc_action_item.apps.AppConfig",
         "edc_appointment.apps.AppConfig",
         "edc_auth.apps.AppConfig",
@@ -41,13 +42,15 @@ project_settings = DefaultTestSettings(
         "edc_notification.apps.AppConfig",
         "edc_registration.apps.AppConfig",
         "edc_sites.apps.AppConfig",
+        "edc_subject_dashboard.apps.AppConfig",
         "edc_visit_tracking.apps.AppConfig",
         "edc_visit_schedule.apps.AppConfig",
         "edc_qareports.apps.AppConfig",
         "edc_appconfig.apps.AppConfig",
     ],
-    add_dashboard_middleware=False,
+    add_dashboard_middleware=True,
     add_lab_dashboard_middleware=False,
+    add_adverse_event_dashboard_middleware=False,
 ).settings
 
 
