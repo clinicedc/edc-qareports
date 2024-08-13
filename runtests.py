@@ -2,7 +2,8 @@
 import logging
 from pathlib import Path
 
-from edc_test_utils import DefaultTestSettings, func_main
+from edc_test_settings.default_test_settings import DefaultTestSettings
+from edc_test_settings.func_main import func_main
 
 app_name = "edc_qareports"
 base_dir = Path(__file__).absolute().parent
