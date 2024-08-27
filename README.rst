@@ -35,7 +35,7 @@ Custom QA / data management reports using SQL VIEWS
 ===================================================
 
 Although not absolutely necessary, it is convenient to base a QA report on an SQL VIEW. As
-issues are resolved, the SQL VIEW reflects the changes.
+data issues are resolved, the SQL VIEW reflects the current data.
 
 A QA report based on an SQL VIEW can be represented by a model class. By registering the model class in Admin, all the functionality of the ModelAdmin class is available to show the report.
 
@@ -46,15 +46,14 @@ First, within your EDC project, create a `<myapp>_reports` app. For example `Met
     meta_edc
     meta_edc/meta_reports
     meta_edc/meta_reports/admin
-    meta_edc/meta_reports/admin/unmanaged
-    meta_edc/meta_reports/admin/unmanaged/my_view_in_sql_admin.py
-    meta_edc/meta_reports/admin/report_note_admin.py
+    meta_edc/meta_reports/admin/dbviews
+    meta_edc/meta_reports/admin/dbviews/my_view_in_sql_admin.py
     meta_edc/meta_reports/migrations
     meta_edc/meta_reports/migrations/0001_myviewinsql.py
     meta_edc/meta_reports/models
-    meta_edc/meta_reports/models/unmanaged
-    meta_edc/meta_reports/models/unmanaged/my_view_in_sql.py
-    meta_edc/meta_reports/models/unmanaged/my_view_in_sql.sql
+    meta_edc/meta_reports/models/dbviews
+    meta_edc/meta_reports/models/dbviews/mymodel/unmanaged_model.py
+    meta_edc/meta_reports/models/dbviews/mymodel/view_definition.py
     meta_edc/meta_reports/admin_site.py
     meta_edc/meta_reports/apps.py
     meta_edc/ ...
@@ -81,16 +80,43 @@ Now that you have created the basic structure for the Reports App, create an SQL
 * Column ``report_model`` is in label_lower format.
 * Suffix the view name with ``_view``.
 
+To manage SQL view code, we use ``django_dbviews``. This module helps by using migrations to manage changes to the SQL view code.
+
+
+The ``view_defintion.py`` might look like this:
+
 .. code-block:: sql
 
-    create view my_view_in_sql_view as (
-        select *, uuid() as 'id', now() as 'created',
-            'meta_reports.myviewinsql' as report_model
+    from edc_qareports.sql_generator import SqlViewGenerator
+
+    def get_view_definition() -> dict:
+        subquery = """
+            select subject_identifier, site_id, appt_datetime, `first_value`,
+            `second_value`, `third_value`,
+            datediff(`third_date`, `first_date`) as `interval_days`,
+            datediff(now(), `first_date`) as `from_now_days`
             from (
-                select  distinct `subject_identifier`, `site_id`, col1, col2, col3
-                from some_crf_table
-                where col1 is null
-            ) as A
+                select subject_identifier, site_id, appt_datetime,
+                FIRST_VALUE(visit_code) OVER w as `first_value`,
+                NTH_VALUE(visit_code, 2) OVER w as `second_value`,
+                NTH_VALUE(visit_code, 3) OVER w as `third_value`,
+                FIRST_VALUE(appt_datetime) OVER w as `first_date`,
+                NTH_VALUE(appt_datetime, 3) OVER w as `third_date`
+                from edc_appointment_appointment where visit_code_sequence=0 and appt_status="New"
+                and appt_datetime <= now()
+                WINDOW w as (PARTITION BY subject_identifier order by appt_datetime ROWS UNBOUNDED PRECEDING)
+            ) as B
+            where `second_value` is not null and `third_value` is not null
+            """  # noqa
+        sql_view = SqlViewGenerator(
+            report_model="meta_reports.unattendedthreeinrow",
+            ordering=["subject_identifier", "site_id"],
+        )
+        return {
+            "django.db.backends.mysql": sql_view.as_mysql(subquery),
+            "django.db.backends.postgresql": sql_view.as_postgres(subquery),
+            "django.db.backends.sqlite3": sql_view.as_sqlite(subquery),
+        }
 
 Using a model class to represent your QA Report
 +++++++++++++++++++++++++++++++++++++++++++++++
