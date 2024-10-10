@@ -61,8 +61,8 @@ deps =
 
 commands =
     pip install -U pip
-    pip --version
     python --version
+    pip --version
     pip freeze
     coverage run -a runtests.py
     coverage report
